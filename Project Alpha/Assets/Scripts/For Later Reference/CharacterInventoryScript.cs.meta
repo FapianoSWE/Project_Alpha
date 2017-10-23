@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f7daa88ac3c28884db4778abcc4012aa
+timeCreated: 1507884265
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ItemManager: {instanceID: 0}
+  - inventoryCanvas: {fileID: 1590646785135544, guid: f1519a10c9ac5c441a840c0d909dd54e,
+      type: 2}
+  - equipmentCanvas: {fileID: 1381739093330804, guid: a9b2e52a1c37d4f4b9e03d98b2ced981,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
