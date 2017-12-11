@@ -65,6 +65,7 @@ public class NewCameraScript : MonoBehaviour
         Cursor.visible = false;
 
         menuOpenScript = GameObject.Find("Main Canvas").GetComponent<MenuOpenScript>();
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()

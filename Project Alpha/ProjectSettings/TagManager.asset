@@ -34,7 +34,7 @@ TagManager:
   - 
   - MiniMapLayer
   - InvisibleLayer
-  - 
+  - IgnoreLight
   - 
   - 
   - 

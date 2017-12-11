@@ -20,6 +20,7 @@ public class PlayerAnimation : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        anim.speed = 2f;
         if (playerController.isWalking)
         {
             anim.SetBool("isRunning", true);

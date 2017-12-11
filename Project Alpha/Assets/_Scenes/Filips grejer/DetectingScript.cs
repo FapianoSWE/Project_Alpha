@@ -24,7 +24,8 @@ public class DetectingScript : MonoBehaviour {
 	
 	void Update ()
     {
-
+        //print(spawnTimer);
+        print(ithappendBoi);
 
         
         if(ithappendBoi == true)

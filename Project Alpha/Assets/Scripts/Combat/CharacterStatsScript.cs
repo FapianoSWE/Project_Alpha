@@ -74,7 +74,7 @@ public class CharacterStatsScript : MonoBehaviour
         baseManaRegen = 5,
         manaRegen;
 
-    public int currentHealth,
+    public float currentHealth,
         maxHealth,
         damageTaken,
         baseHealth = 50,
@@ -132,14 +132,15 @@ public class CharacterStatsScript : MonoBehaviour
         leveledUp = true;
     }
 
-    public int DealDamage(int baseDamage, DamageTypes _DamageType)
+    public float DealDamage(float baseDamage, DamageTypes _DamageType)
     {
             int crit = Random.Range(0, 100);
 
             if (_DamageType == DamageTypes.Melee)
             {
-                int damage;
+                float damage;
                 damage = baseDamage + ((strength * 2)) + GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating;
+
                 if (crit <= currentCritChance)
                 {
                     damage *= 2;
@@ -149,7 +150,7 @@ public class CharacterStatsScript : MonoBehaviour
             }
             else if (_DamageType == DamageTypes.Ranged)
             {
-                int damage;
+                float damage;
                 damage = baseDamage + ((agility * 2)); //+ GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating);
 
                 if (crit <= currentCritChance)
@@ -161,7 +162,7 @@ public class CharacterStatsScript : MonoBehaviour
             }
             else if (_DamageType == DamageTypes.Magic)
             {
-                int damage;
+                float damage;
                 damage = baseDamage + (intelligence * 2);
 
                 if (crit <= currentCritChance)
@@ -174,20 +175,25 @@ public class CharacterStatsScript : MonoBehaviour
             return 0;
     }
 
-    public void TakeDamage(int incomingDamage,int enemyLuck)
+    public void TakeDamage(float incomingDamage)
     {
         if (IsPlayer)
         {
-            currentHealth -= (incomingDamage - ((resistance * 2)+ GetComponent<CharacterInventoryScript>().EquipmentStorage[0].armorRating+GetComponent<CharacterInventoryScript>().EquipmentStorage[1].armorRating+GetComponent<CharacterInventoryScript>().EquipmentStorage[2].armorRating));
+            int armor = 0;
+            foreach (ItemManagerScript.InventoryItem i in GetComponent<CharacterInventoryScript>().EquipmentStorage)
+            {
+                armor += i.armorRating;
+            }
+            currentHealth -= (int)(incomingDamage - ((resistance * 2)+ armor));
         }
         else if(!IsPlayer)
         {
-            currentHealth -= (incomingDamage - (resistance * 2));
+            currentHealth -= (int)(incomingDamage - (resistance * 2));
         }
         
     }
 
-    public void Healed(int incomingHeal)
+    public void Healed(float incomingHeal)
     {
             currentHealth += incomingHeal + (intelligence * 2);
     }
@@ -203,7 +209,6 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             intelligence += 1;
-            print(intelligence);
         }
     }
 
@@ -264,13 +269,32 @@ public class CharacterStatsScript : MonoBehaviour
 
     public void Update()
     {
-        
-            regenTimer -= Time.deltaTime;
-            maxHealth = baseHealth * currentLevel + (vitality * 25);
-            maxMana = baseMana * currentLevel + (intelligence * 15);
+
+        if(Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            agility = 1000;
+            strength = 1000;
+            vitality = 1000;
+            intelligence = 1000;
+            luck = 1000;
+            dexterity = 1000;
+            currentLevel = 1000;
+        }
+
+        if (Input.GetKey(KeyCode.Keypad0))
+        {
+            GainXP(10);
+        }
+        if (Input.GetKey(KeyCode.Keypad1))
+        {
+            gold++;
+        }
+        regenTimer -= Time.deltaTime;
+            maxHealth = (baseHealth * currentLevel + (vitality * 10)) - 10;
+            maxMana = (baseMana * currentLevel + (intelligence * 5)) - 5;
             currentCritChance = baseCritChance + Mathf.RoundToInt(luck * 0.25f);
-            manaRegen = baseManaRegen * currentLevel + (intelligence * 2);
-            healthRegen = baseHealthRegen * currentLevel + (vitality * 2);
+            manaRegen = (baseManaRegen * currentLevel + (intelligence * 2))-2;
+            healthRegen = (baseHealthRegen * currentLevel + (vitality * 2))-2;
 
             if (leveledUp)
             {
@@ -299,23 +323,6 @@ public class CharacterStatsScript : MonoBehaviour
             
             if(IsPlayer)
             {
-                if (Input.GetKeyDown(KeyCode.K))
-                {
-                    GainXP(35);
-                }
-
-                if (Input.GetKeyDown(KeyCode.L))
-                {
-                    TakeDamage(15,0);
-                }
-                if (Input.GetKeyDown(KeyCode.O))
-                {
-                    currentMana -= 75;
-                }
-                if (Input.GetKeyDown(KeyCode.P))
-                {
-                    attributePoints += 15;
-                }
 
             if (Input.GetKeyDown(KeyCode.C))
             {

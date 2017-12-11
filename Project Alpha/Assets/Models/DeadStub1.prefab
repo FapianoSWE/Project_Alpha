@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33298917048948638}
   - component: {fileID: 23809594403962416}
   - component: {fileID: 95545488866102626}
-  - component: {fileID: 65432442558617420}
+  - component: {fileID: 64872793862355066}
   m_Layer: 0
   m_Name: DeadStub1
   m_TagString: Untagged
@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1893613635919376}
   m_LocalRotation: {x: -0, y: 0.01647957, z: -0, w: 0.9998642}
-  m_LocalPosition: {x: -0.9726488, y: 0.0018539429, z: -7.5865846}
+  m_LocalPosition: {x: 1175.516, y: 100.24069, z: 1244.9985}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -52,6 +52,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -68,6 +69,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -83,8 +85,8 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1893613635919376}
   m_Mesh: {fileID: 4300000, guid: c779d6b9933e9074d81a34510b3ba5ab, type: 3}
---- !u!65 &65432442558617420
-BoxCollider:
+--- !u!64 &64872793862355066
+MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -93,8 +95,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6095334, y: 0.73867345, z: 0.70521885}
-  m_Center: {x: 0.0130520165, y: 0.31371826, z: -0.036957037}
+  m_Convex: 1
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: c779d6b9933e9074d81a34510b3ba5ab, type: 3}
 --- !u!95 &95545488866102626
 Animator:
   serializedVersion: 3

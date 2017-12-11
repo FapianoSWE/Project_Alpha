@@ -13,22 +13,9 @@ public class GameManager : MonoBehaviour
 
 	void Update ()
     {
-		if(Input.GetKeyDown(KeyCode.Escape) && !isPaused)
+		if(Input.GetKeyDown(KeyCode.Escape))
         {
-            isPaused = true;
-        }
-        else if(Input.GetKeyDown(KeyCode.Escape) && isPaused)
-        {
-            isPaused = false;
-        }
-
-        if(isPaused)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
+            isPaused = !isPaused;
         }
 	}
 }

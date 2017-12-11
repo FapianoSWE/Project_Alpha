@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private float rotateSpeed = 150.0f;
 
     public bool grounded;
-    private Vector3 moveDirection = Vector3.zero;
+    public Vector3 moveDirection = Vector3.zero;
     public bool isWalking;
     private string moveStatus = "idle";
 
@@ -70,8 +70,24 @@ public class PlayerController : MonoBehaviour
     public bool itemCanvasOpen;
 
     public Vector3 spawnPosition;
+
+    public GameObject chestPrefab;
+
+    GameObject tempChest;
+
+    public GameObject deathEffetct;
+    public SpellDatabase spellDatabase;
+
+    public bool inDialogue;
+
+    string currentScene,
+        prevScene;
+
+    public BoxCollider bCollider;
+
     void Start ()
     {
+        spellDatabase = GameObject.Find("SpellObjects").GetComponent<SpellDatabase>();
         spawnPosition = transform.position;
         controller = GetComponent<CharacterController>();
         originalRotation = transform.rotation;
@@ -96,13 +112,47 @@ public class PlayerController : MonoBehaviour
         inGameMenu.SetActive(false);
         menuActive = false;
         */
-        
         canMove = true;
-	}
+        DontDestroyOnLoad(gameObject);
+        currentScene = SceneManager.GetActiveScene().name;
+        prevScene = SceneManager.GetActiveScene().name;
+    }
 
     
+    public void DebugChest()
+    {
+        for (int i = 0; i < FindObjectOfType<ItemManagerScript>().InventoryItemList.Count; i++)
+        {
+            if(i % 16 == 0)
+            {
+                tempChest = Instantiate(chestPrefab);
+
+                tempChest.transform.position = gameObject.transform.position + (transform.forward * 2) + transform.up;              
+            }
+            tempChest.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] = 1;
+            tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[i] = FindObjectOfType<ItemManagerScript>().InventoryItemList[i];
+        }
+    }
+
     void Update()
     {
+        currentScene = SceneManager.GetActiveScene().name;
+
+        if(currentScene != prevScene)
+        {
+            transform.position = GameObject.Find(GameObject.Find("VarStorage").GetComponent<VarStorageScript>().spawnpointname).transform.position;
+            foreach(GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                if (g != gameObject)
+                    Destroy(g);
+            }
+
+        }
+        prevScene = SceneManager.GetActiveScene().name;
+
+        if (Input.GetKeyDown(KeyCode.Y))
+            DebugChest();
+
         if(GetComponent<CharacterStatsScript>().currentHealth<=0)
         {
             Death();
@@ -121,14 +171,7 @@ public class PlayerController : MonoBehaviour
         }
         if (GetComponent<CharacterStatsScript>().statUI.statsActive)
             itemCanvasOpen = true;
-        if (menuActive)
-            itemCanvasOpen = true; 
-
-        if (itemCanvasOpen)
-            Time.timeScale = 0;
-        else
-            Time.timeScale = 1;
-
+        
         coolDown -= Time.deltaTime;
             /*
             if(coordinates[0].name == "X-Coordinate")
@@ -150,10 +193,10 @@ public class PlayerController : MonoBehaviour
 
         if(!debugMode)
         {
-
+            Physics.IgnoreCollision(GetComponent<Collider>(), GameObject.FindGameObjectWithTag("Terrain").GetComponent<Collider>(), false);
+            Physics.IgnoreCollision(bCollider, GameObject.FindGameObjectWithTag("Terrain").GetComponent<Collider>(), false);
             if (Input.GetMouseButtonDown(1))
             {
-
 
             }
 
@@ -164,7 +207,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-
                 canJump = true;
             }
             if (!canMove)
@@ -173,7 +215,6 @@ public class PlayerController : MonoBehaviour
             }
             if (grounded && canMove && !itemCanvasOpen)
             {
-
                 isJumping = false;
 
                 moveDirection = new Vector3((Input.GetAxis("Horizontal")), 0, Input.GetAxis("Vertical"));
@@ -190,9 +231,7 @@ public class PlayerController : MonoBehaviour
                 {
                     isWalking = false;
                 }
-
-
-
+                
                 if (Input.GetKeyDown(KeyCode.Space) && canJump)
                 {
                     moveDirection.y = jumpSpeed;
@@ -200,7 +239,6 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
-
 
             // Allow turning at anytime. Keep the character facing in the same direction as the Camera if the right mouse button is down.
 
@@ -231,16 +269,18 @@ public class PlayerController : MonoBehaviour
 
             moveDirection = transform.TransformDirection(moveDirection);
             moveDirection *= runSpeed * debugSpeed;
-
+                
+            Physics.IgnoreCollision(GetComponent<Collider>(), GameObject.FindGameObjectWithTag("Terrain").GetComponent<Collider>(), true);
+            Physics.IgnoreCollision(bCollider, GameObject.FindGameObjectWithTag("Terrain").GetComponent<Collider>(), true);
 
             transform.rotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
             if (Input.GetKey(KeyCode.Space))
             {
-                moveDirection.y += gravity * Time.deltaTime * debugSpeed;
+                moveDirection.y += gravity * Time.deltaTime * debugSpeed * 5;
             }
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                moveDirection.y -= gravity * Time.deltaTime * debugSpeed;
+                moveDirection.y -= gravity * Time.deltaTime * debugSpeed * 5;
             }
             CollisionFlags flags;
             flags = controller.Move((moveDirection * Time.deltaTime));
@@ -261,10 +301,10 @@ public class PlayerController : MonoBehaviour
             if (castTimer <= 0)
             {
                 GameObject temp = Instantiate(currentSpellObject, transform.position + transform.forward * 2, Quaternion.identity);
-                if (isProjectile)
-                {
-                    temp.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 5000);
-                }
+                if (currentSpellObject.GetComponent<Fireball>())
+                    currentSpellObject.GetComponent<Fireball>().caster = gameObject;
+
+                temp.transform.rotation = transform.rotation;
                 castStates = CastStates.notCasting;
                 castTimer = -1;
             }
@@ -285,21 +325,24 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
+            if(Input.GetKeyDown(KeyCode.U))
+        {
+            Instantiate(Resources.Load("Enemies/MagicEnemyPrefab"), new Vector3(transform.position.x, transform.position.y, transform.position.z + 5), Quaternion.identity);
+        }
 
             if(Input.GetKeyDown(KeyCode.T))
             {
                 debugMode = !debugMode;
+
             }
         
             
             if (Input.GetKeyDown(KeyCode.Escape) && menuActive == false)
             {
-                //  inGameMenu.SetActive(true);
                 menuActive = true;
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                //inGameMenu.SetActive(false);
                 menuActive = false;
             }
     }
@@ -334,7 +377,7 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.name == "AttackZone")
         {
-            GetComponent<CharacterStatsScript>().TakeDamage(other.transform.parent.transform.parent.GetComponent<CharacterStatsScript>().strength * 5,other.transform.parent.transform.parent.GetComponent<CharacterStatsScript>().luck);
+            GetComponent<CharacterStatsScript>().TakeDamage(other.transform.parent.transform.parent.GetComponent<CharacterStatsScript>().strength * 5);
         }
         if (other.gameObject.name == "Heal(Clone)")
         {
@@ -343,11 +386,10 @@ public class PlayerController : MonoBehaviour
     }
     private void OnCollisionEnter(Collision c)
     {
-        if (c.gameObject.GetComponent<Fireball>())
+        if (c.gameObject.tag == "Spell")
         {
             Instantiate(c.gameObject.GetComponent<Fireball>().deathEffect, gameObject.transform.position, Quaternion.identity, null);
-            GetComponent<CharacterStatsScript>().TakeDamage(c.gameObject.GetComponent<Fireball>().damage, c.gameObject.GetComponent<Fireball>().casterLuck);
-            c.gameObject.GetComponent<Fireball>().OnHit(gameObject);
+            GetComponent<CharacterStatsScript>().TakeDamage(c.gameObject.GetComponent<Fireball>().damage);
         }
         if(c.gameObject.GetComponent<PushSpellScript>())
         {
@@ -362,5 +404,7 @@ public class PlayerController : MonoBehaviour
         GetComponent<CharacterStatsScript>().currentHealth = GetComponent<CharacterStatsScript>().maxHealth;
         GetComponent<CharacterStatsScript>().currentMana = GetComponent<CharacterStatsScript>().maxMana;
         castStates = CastStates.notCasting;
+        deathEffetct.gameObject.SetActive(true);
     }
+    
 }

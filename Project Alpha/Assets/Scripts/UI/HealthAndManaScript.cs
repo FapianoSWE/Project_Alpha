@@ -19,31 +19,44 @@ public class HealthAndManaScript : MonoBehaviour
 
     CharacterStatsScript characterStats;
 
-	void Start ()
+    void Start()
     {
         characterStats = GameObject.Find("Player").GetComponent<CharacterStatsScript>();
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
-		healthText.text = "" + characterStats.currentHealth + " / " + characterStats.maxHealth;
+        healthText.text = "" + characterStats.currentHealth + " / " + characterStats.maxHealth;
         manaText.text = "" + characterStats.currentMana + " / " + characterStats.maxMana;
 
         if (characterStats.currentHealth < characterStats.maxHealth)
         {
             currentHealthFill = ((float)characterStats.currentHealth / (float)characterStats.maxHealth);
+            bool losingHealth = currentHealthFill < healthImage.fillAmount;
 
             if (healthImage.fillAmount > currentHealthFill)
             {
                 healthImage.fillAmount -= 0.007f;
+
+                if (losingHealth)
+                {
+                    if (currentHealthFill >= healthImage.fillAmount)
+                    {
+                        healthImage.fillAmount = currentHealthFill;
+                    }
+                }
             }
             else if (healthImage.fillAmount < currentHealthFill)
             {
                 healthImage.fillAmount += 0.005f;
-            }
-            if (healthImage.fillAmount == currentHealthFill)
-            {
-                healthImage.fillAmount = healthImage.fillAmount;
+
+                if (!losingHealth)
+                {
+                    if (currentHealthFill <= healthImage.fillAmount)
+                    {
+                        healthImage.fillAmount = currentHealthFill;
+                    }
+                }
             }
         }
         else if (characterStats.currentHealth >= characterStats.maxHealth)
@@ -57,18 +70,31 @@ public class HealthAndManaScript : MonoBehaviour
         if (characterStats.currentMana < characterStats.maxMana)
         {
             currentManaFill = ((float)characterStats.currentMana / (float)characterStats.maxMana);
+            bool losingMana = currentManaFill < manaImage.fillAmount;
 
             if (manaImage.fillAmount > currentManaFill)
             {
                 manaImage.fillAmount -= 0.007f;
+
+                if (losingMana)
+                {
+                    if (currentManaFill >= manaImage.fillAmount)
+                    {
+                        manaImage.fillAmount = currentManaFill;
+                    }
+                }
             }
             else if (manaImage.fillAmount < currentManaFill)
             {
                 manaImage.fillAmount += 0.005f;
-            }
-            if (manaImage.fillAmount == currentManaFill)
-            {
-                manaImage.fillAmount = manaImage.fillAmount;
+
+                if (!losingMana)
+                {
+                    if (currentManaFill <= manaImage.fillAmount)
+                    {
+                        manaImage.fillAmount = currentManaFill;
+                    }
+                }
             }
         }
         else if (characterStats.currentMana >= characterStats.maxMana)

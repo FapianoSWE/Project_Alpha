@@ -118,7 +118,7 @@ public class SaveAndLoadScript : MonoBehaviour
         playerDex = GetComponent<CharacterStatsScript>().dexterity;
         playerRes = GetComponent<CharacterStatsScript>().resistance;
         playerAttributePoints = GetComponent<CharacterStatsScript>().attributePoints;
-        playerHealth = GetComponent<CharacterStatsScript>().currentHealth;
+        playerHealth = (int)GetComponent<CharacterStatsScript>().currentHealth;
         //playerMana = GetComponent<CharacterStatsScript>().currentMana;
         playerGold = GetComponent<CharacterStatsScript>().gold;
         currentScene = SceneManager.GetActiveScene().name;

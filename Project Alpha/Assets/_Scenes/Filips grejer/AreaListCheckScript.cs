@@ -11,7 +11,11 @@ public class AreaListCheckScript : MonoBehaviour {
 
 	void Start ()
     {
-		
+        zoneList.Clear();
+        foreach (DetectingScript g in GameObject.FindObjectsOfType<DetectingScript>())
+        {
+            zoneList.Add(g.gameObject);
+        }
 	}
 	
 	void Update ()

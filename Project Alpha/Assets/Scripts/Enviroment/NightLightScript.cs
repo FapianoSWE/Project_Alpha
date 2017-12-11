@@ -11,7 +11,7 @@ public class NightLightScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(System.DateTime.Now.Hour >= 17)
+		/*if(System.DateTime.Now.Hour >= 17)
         {
             GetComponent<Light>().intensity = 0.2f;
         }
@@ -22,6 +22,6 @@ public class NightLightScript : MonoBehaviour {
         else
         {
             GetComponent<Light>().intensity = 0;
-        }
+        }*/
 	}
 }

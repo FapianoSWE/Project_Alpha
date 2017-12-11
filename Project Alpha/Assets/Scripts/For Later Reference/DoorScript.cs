@@ -20,12 +20,11 @@ public class DoorScript : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "me")
+        if (other.gameObject.name == "Player")
         {
             other.GetComponent<SaveAndLoadScript>().Save();
             GameObject.Find("VarStorage").GetComponent<VarStorageScript>().spawnpointname = spawnLocation;
-            Destroy(other.gameObject);
-            SceneManager.LoadScene(sceneToConnect);
+            SceneManager.LoadSceneAsync(sceneToConnect);
         }
     }
 

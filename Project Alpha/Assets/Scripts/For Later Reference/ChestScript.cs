@@ -27,6 +27,8 @@ public class ChestScript : MonoBehaviour
         }
         if (empySlots == 16 && aliveTime >= 2|| Vector3.Distance(transform.position, GameObject.Find("Player").transform.position) > 100)
         {
+            Destroy(GetComponent<CharacterInventoryScript>().equipmentCanvas);
+            Destroy(GetComponent<CharacterInventoryScript>().inventoryCanvas);
             Destroy(gameObject);
         }
     }

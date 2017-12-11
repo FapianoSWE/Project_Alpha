@@ -32,7 +32,7 @@ public class ItemManagerScript : MonoBehaviour {
         {
             head,
             body,
-            legs,
+            boots,
             ring,
         }
         public enum WeaponType
@@ -92,26 +92,46 @@ public class ItemManagerScript : MonoBehaviour {
             can_use = canUse;
             itemTexture = Resources.Load<Sprite>("InventoryIcons/" + texturename);
         }
+        public InventoryItem(int itemid, int maxamount, int Value, bool canUse, string texturename, string itemName, string itemNames)
+        {
+            itemId = itemid;
+            can_use = canUse;
+            itemMaxAmount = maxamount;
+            value = Value;
+            ItemName = itemName;
+            ItemNames = itemNames;
+            itemTexture = Resources.Load<Sprite>("InventoryIcons/" + texturename);
+        }
         public InventoryItem(int itemid, int maxamount, int Value, bool canUse, string texturename)
         {
             itemId = itemid;
             can_use = canUse;
             itemMaxAmount = maxamount;
             value = Value;
+            ItemName = "Gold";
+            ItemNames = "Gold";
             itemTexture = Resources.Load<Sprite>("InventoryIcons/" + texturename);
         }
 
     }
     // Use this for initialization
     void Start () {
-        InventoryItemList.Add(new InventoryItem(0, 64, 50, InventoryItem.ItemType.healing,"Health Potion(50)","Health Potions(50)", 50, InventoryItem.HealType.health, "healthpotion", true));
-        InventoryItemList.Add(new InventoryItem(1, 64, 50, InventoryItem.ItemType.healing, "Mana Potion(50)", "Mana Potions(50)", 50, InventoryItem.HealType.mana, "manapotion", true));
+        DontDestroyOnLoad(gameObject);
+        InventoryItemList.Add(new InventoryItem(0, 64, 50, InventoryItem.ItemType.healing,"Health Potion","Health Potions", 50, InventoryItem.HealType.health, "healthpotion", true));
+        InventoryItemList.Add(new InventoryItem(1, 64, 50, InventoryItem.ItemType.healing, "Mana Potion", "Mana Potions", 50, InventoryItem.HealType.mana, "manapotion", true));
         InventoryItemList.Add(new InventoryItem(2, 1, 250, InventoryItem.ItemType.armor,"Diamond Armor","Diamond Armors", InventoryItem.ArmorType.body, 50, "diamondarmor", true));
         InventoryItemList.Add(new InventoryItem(3, "transparent", false));
         InventoryItemList.Add(new InventoryItem(4, 10000, 0, false, "money"));
         InventoryItemList.Add(new InventoryItem(5, 1, 100, InventoryItem.ItemType.armor, "Iron Armor", "Iron Armors", InventoryItem.ArmorType.body, 25, "ironarmor", true));
         InventoryItemList.Add(new InventoryItem(6, 1, 250, InventoryItem.ItemType.weapon, "Diamond Sword", "Diamond Sword", InventoryItem.WeaponType.sword, 50, "diamondsword", true));
         InventoryItemList.Add(new InventoryItem(7, 1, 100, InventoryItem.ItemType.weapon, "Iron Sword", "Iron Swords", InventoryItem.WeaponType.sword, 25, "ironsword", true));
+        InventoryItemList.Add(new InventoryItem(8, 1, 100, InventoryItem.ItemType.armor, "Iron Helmet", "Iron Helmets", InventoryItem.ArmorType.head, 10, "ironhelmet", true));
+        InventoryItemList.Add(new InventoryItem(9, 1, 250, InventoryItem.ItemType.armor, "Diamond Helmet", "Diamond Helmets", InventoryItem.ArmorType.head, 15, "diamondhelmet", true));
+        InventoryItemList.Add(new InventoryItem(10, 1, 100, InventoryItem.ItemType.armor, "Iron Boots", "Iron Boots", InventoryItem.ArmorType.boots, 10, "ironboots", true));
+        InventoryItemList.Add(new InventoryItem(11, 1, 250, InventoryItem.ItemType.armor, "Diamond Boots", "Diamond Boots", InventoryItem.ArmorType.boots, 15, "diamondboots", true));
+        InventoryItemList.Add(new InventoryItem(12, 1, 50, InventoryItem.ItemType.armor, "Silver Ring", "Silver Rings", InventoryItem.ArmorType.ring, 5, "silverring", true));
+        InventoryItemList.Add(new InventoryItem(13, 1, 150, InventoryItem.ItemType.armor, "Gold Ring", "Gold Rings", InventoryItem.ArmorType.ring, 10, "goldring", true));
+        InventoryItemList.Add(new InventoryItem(14, 64, 150, false, "barbarianleg", "Barbarian Leg", "Barbarian Legs"));
     }
 
     // Update is called once per frame

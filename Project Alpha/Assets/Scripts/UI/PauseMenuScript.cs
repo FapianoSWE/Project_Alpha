@@ -25,4 +25,13 @@ public class PauseMenuScript : MonoBehaviour
             pauseMenu.SetActive(false);
         }
 	}
+
+    public void ResumeGame()
+    {
+        gameManagerScript.isPaused = false;
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

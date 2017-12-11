@@ -20,10 +20,17 @@ public class HotbarSpellId : MonoBehaviour {
 
     public void Update()
     {
-        /*
+        
         currentSpell = playercontroller.findSpell(spellId);
-        print(currentSpell.spellName);
-        spellImage.sprite = currentSpell.icon;
-        */
+        if(currentSpell != null)
+        {
+            spellImage.sprite = currentSpell.icon;
+        }
+        else if(currentSpell == null)
+        {
+            spellImage.sprite = GameObject.Find("SpellObjects").GetComponent<SpellIcons>().spellIcons[10];
+        }
+        
+        
     }
 }

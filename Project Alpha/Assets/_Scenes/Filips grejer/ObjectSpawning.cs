@@ -67,8 +67,8 @@ public class ObjectSpawning : MonoBehaviour {
             
 
             RaycastHit hit;
-            Ray ray = new Ray(pos + (new Vector3(0, 1000, 0)), transform.up * -1);
-            if (Physics.Raycast(ray, out hit, 2000))
+            Ray ray = new Ray(pos + (new Vector3(0, 450, 0)), transform.up * -1);
+            if (Physics.Raycast(ray, out hit, 450))
             {
                 print(hit.transform.name);
             }
@@ -80,7 +80,7 @@ public class ObjectSpawning : MonoBehaviour {
             if (distance > 5 && hit.transform.tag == "Terrain" && hit.transform.tag != "Enemy")
             {
 
-             Instantiate(enemyPrefab, new Vector3(pos.x, hit.point.y + 1, pos.z), rot);
+             Instantiate(enemyPrefab, new Vector3(pos.x, hit.point.y + 1, pos.z), rot, GameObject.Find("Enemies").GetComponent<Transform>());
                 
 
             }
