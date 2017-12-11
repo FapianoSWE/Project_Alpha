@@ -68,22 +68,23 @@ public class ObjectSpawning : MonoBehaviour {
 
             RaycastHit hit;
             Ray ray = new Ray(pos + (new Vector3(0, 450, 0)), transform.up * -1);
-            if (Physics.Raycast(ray, out hit, 450))
+            if (Physics.Raycast(ray, out hit, 600))
             {
                 print(hit.transform.name);
-            }
+                distance = Vector3.Distance(detectingScript.EnterPosition, pos);
 
-            distance = Vector3.Distance(detectingScript.EnterPosition, pos);
+                Quaternion rot = new Quaternion(0, Random.Range(0, 359), 0, 0);
 
-            Quaternion rot = new Quaternion(0, Random.Range(0, 359), 0, 0);
+                print(hit);
+                print(hit.transform);
+                print(hit.transform.tag);
+                if (distance > 5 && hit.transform.tag == "Terrain" && hit.transform.tag != "Enemy")
+                {
 
-            if (distance > 5 && hit.transform.tag == "Terrain" && hit.transform.tag != "Enemy")
-            {
+                    Instantiate(enemyPrefab, new Vector3(pos.x, hit.point.y + 1, pos.z), rot, GameObject.Find("Enemies").GetComponent<Transform>());
 
-             Instantiate(enemyPrefab, new Vector3(pos.x, hit.point.y + 1, pos.z), rot, GameObject.Find("Enemies").GetComponent<Transform>());
-                
-
-            }
+                }
+            }            
             else
             {
                 count++;
