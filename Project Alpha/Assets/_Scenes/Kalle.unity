@@ -310,12 +310,12 @@ Prefab:
     - target: {fileID: 224437940273573530, guid: ae53dbf09f69f8f48b5c723d3d812941,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 570
+      value: 545
       objectReference: {fileID: 0}
     - target: {fileID: 224437940273573530, guid: ae53dbf09f69f8f48b5c723d3d812941,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 262.5
+      value: 296
       objectReference: {fileID: 0}
     - target: {fileID: 224437940273573530, guid: ae53dbf09f69f8f48b5c723d3d812941,
         type: 2}
@@ -907,7 +907,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4481183166037982, guid: a9ba4f4e5bb62504eb03b1d3f4944bff, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -225.6
+      value: -224.81
       objectReference: {fileID: 0}
     - target: {fileID: 4481183166037982, guid: a9ba4f4e5bb62504eb03b1d3f4944bff, type: 2}
       propertyPath: m_LocalRotation.x
@@ -949,12 +949,12 @@ Prefab:
         type: 2}
       propertyPath: QuestCanvas
       value: 
-      objectReference: {fileID: 2131286103}
+      objectReference: {fileID: 0}
     - target: {fileID: 114300289851378208, guid: a9ba4f4e5bb62504eb03b1d3f4944bff,
         type: 2}
       propertyPath: QuestText
       value: 
-      objectReference: {fileID: 2089165171}
+      objectReference: {fileID: 0}
     - target: {fileID: 114300289851378208, guid: a9ba4f4e5bb62504eb03b1d3f4944bff,
         type: 2}
       propertyPath: ItemManager
@@ -1534,7 +1534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719e8f3251497e24ebc29ebea525a9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tempSprite: {fileID: 0}
+  spellIcons: {fileID: 0}
 --- !u!4 &1153204225
 Transform:
   m_ObjectHideFlags: 0
@@ -2525,16 +2525,6 @@ Prefab:
     - {fileID: 114125595084085814, guid: d2a55d34337385244b655b953425d211, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d2a55d34337385244b655b953425d211, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &2089165171 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1465992708364546, guid: ae53dbf09f69f8f48b5c723d3d812941,
-    type: 2}
-  m_PrefabInternal: {fileID: 278245711}
---- !u!1 &2131286103 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1026586384611338, guid: ae53dbf09f69f8f48b5c723d3d812941,
-    type: 2}
-  m_PrefabInternal: {fileID: 278245711}
 --- !u!114 &2142847358 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114609201691980642, guid: a9ba4f4e5bb62504eb03b1d3f4944bff,
