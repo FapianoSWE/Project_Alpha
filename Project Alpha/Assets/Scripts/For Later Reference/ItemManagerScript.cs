@@ -11,7 +11,9 @@ public class ItemManagerScript : MonoBehaviour {
             armorRating,
             attackRating,
             healRating,
-            itemMaxAmount;
+            itemMaxAmount,
+            attributeBuff,
+            duration;
         public string ItemName,
             ItemNames;
         public bool can_use;
@@ -20,6 +22,7 @@ public class ItemManagerScript : MonoBehaviour {
         public HealType healType = new HealType();
         public WeaponType weaponType = new WeaponType();
         public ArmorType armorType = new ArmorType();
+        public AttributeType attributeType = new AttributeType();
         public enum ItemType
         {
             healing,
@@ -27,6 +30,7 @@ public class ItemManagerScript : MonoBehaviour {
             gold,
             armor,
             weapon,
+            buff,
         }
         public enum ArmorType
         {
@@ -46,8 +50,19 @@ public class ItemManagerScript : MonoBehaviour {
             health,
             mana,
         }
+        public enum AttributeType
+        {
+            strength,
+            agility,
+            intelligence,
+            Vitality,
+            Resistance,
+            Dexterity,
+            Luck,
+        }
 
-        public InventoryItem(int itemid, int maxamount, int Value, ItemType itemtype,string itemName,string itemNames, int healrating, HealType healtype, string texturename, bool canUse)
+        public InventoryItem(int itemid, int maxamount, int Value, ItemType itemtype,string itemName,
+            string itemNames, int healrating, HealType healtype, string texturename, bool canUse)
         {
             itemId = itemid;
             itemType = itemtype;
@@ -59,8 +74,23 @@ public class ItemManagerScript : MonoBehaviour {
             ItemNames = itemNames;
             itemTexture = Resources.Load<Sprite>("InventoryIcons/" + texturename);
         }
+        public InventoryItem(int itemid, int maxamount, int value, ItemType itemtype, string itemName, string itemNames, int AttributeBuff,
+            AttributeType AttributeType, int Duration, string texturename, bool canUse)
+        {
+            itemId = itemid;
+            itemType = itemtype;
+            itemMaxAmount = maxamount;
+            ItemName = itemName;
+            ItemNames = itemNames;
+            attributeBuff = AttributeBuff;
+            attributeType = AttributeType;
+            itemTexture = Resources.Load<Sprite>("InventoryIcons/" + texturename);
+            can_use = canUse;
+            duration = Duration;
+        }
 
-        public InventoryItem(int itemid, int maxamount, int Value, ItemType itemtype, string itemName, string itemNames, ArmorType armortype, int armorrating, string texturename, bool canUse)
+        public InventoryItem(int itemid, int maxamount, int Value, ItemType itemtype, string itemName,
+            string itemNames, ArmorType armortype, int armorrating, string texturename, bool canUse)
         {
             itemId = itemid;
             itemType = itemtype;
@@ -73,7 +103,8 @@ public class ItemManagerScript : MonoBehaviour {
             ItemNames = itemNames;
             itemTexture = Resources.Load<Sprite>("InventoryIcons/" + texturename);
         }
-        public InventoryItem(int itemid, int maxamount, int Value, ItemType itemtype, string itemName, string itemNames, WeaponType weapontype, int attackrating, string texturename, bool canUse)
+        public InventoryItem(int itemid, int maxamount, int Value, ItemType itemtype,
+            string itemName, string itemNames, WeaponType weapontype, int attackrating, string texturename, bool canUse)
         {
             itemId = itemid;
             itemType = itemtype;
@@ -132,6 +163,7 @@ public class ItemManagerScript : MonoBehaviour {
         InventoryItemList.Add(new InventoryItem(12, 1, 50, InventoryItem.ItemType.armor, "Silver Ring", "Silver Rings", InventoryItem.ArmorType.ring, 5, "silverring", true));
         InventoryItemList.Add(new InventoryItem(13, 1, 150, InventoryItem.ItemType.armor, "Gold Ring", "Gold Rings", InventoryItem.ArmorType.ring, 10, "goldring", true));
         InventoryItemList.Add(new InventoryItem(14, 64, 150, false, "barbarianleg", "Barbarian Leg", "Barbarian Legs"));
+        InventoryItemList.Add(new InventoryItem(15, 64, 250, InventoryItem.ItemType.buff, "Arcanist´s Potion", "Arcanist´s Potion", 500, InventoryItem.AttributeType.intelligence, 15, "intelligencepotion", true));
     }
 
     // Update is called once per frame
