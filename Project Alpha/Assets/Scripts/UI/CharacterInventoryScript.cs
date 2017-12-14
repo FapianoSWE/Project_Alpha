@@ -203,52 +203,52 @@ public class CharacterInventoryScript : MonoBehaviour
             case ItemManagerScript.InventoryItem.ItemType.buff:
                 if(ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.intelligence)
                 {
-                    Intelligence intelligence = new Intelligence();
+                    Intelligence intelligence = target.AddComponent<Intelligence>();
+                    print("added Intelligence");
                     intelligence.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     intelligence.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Intelligence>();
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.agility)
                 {
                     Agility agility = new Agility();
                     agility.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     agility.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Agility>();
+                    target.AddComponent<Agility>();
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.strength)
                 {
                     Strength strength = new Strength();
                     strength.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     strength.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Strength>();
+                    target.AddComponent<Strength>();
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Vitality)
                 {
                     Vitality vitality = new Vitality();
                     vitality.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     vitality.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Vitality>();
+                    target.AddComponent<Vitality>();
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Dexterity)
                 {
                     Dexterity dexterity = new Dexterity();
                     dexterity.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     dexterity.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Dexterity>();
+                    target.AddComponent<Dexterity>();
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Resistance)
                 {
                     Resistance resistance = new Resistance();
                     resistance.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     resistance.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Resistance>();
+                    target.AddComponent<Resistance>();
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Luck)
                 {
                     Luck luck = new Luck();
                     luck.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
                     luck.duration = ItemManager.InventoryItemList[itemid].duration;
-                    gameObject.AddComponent<Luck>();
+                    target.AddComponent<Luck>();
                 }
                 break;
         }
