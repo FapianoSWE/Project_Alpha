@@ -128,9 +128,9 @@ public class PlayerController : MonoBehaviour
                 tempChest = Instantiate(chestPrefab);
 
                 tempChest.transform.position = gameObject.transform.position + (transform.forward * 2) + transform.up;              
-            }
-            tempChest.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] = 1;
+            }         
             tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[i] = FindObjectOfType<ItemManagerScript>().InventoryItemList[i];
+            tempChest.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] = tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[i].itemMaxAmount;
         }
     }
 
