@@ -10,20 +10,7 @@ public class SpellDatabase : MonoBehaviour {
     float castTime = 0.665f;
     public SpellIcons spellIcons;
     Sprite tempSprite;
-    public void Awake()
-    {
-
-        foreach (Spells spell in masterSpellBook)
-        {
-            if (spell.isLearned && !localSpellBook.Contains(spell))
-            {
-                if (spell.levelReq <= GameObject.Find("Player").GetComponent<CharacterStatsScript>().currentLevel)
-                {
-                    localSpellBook.Add(spell);
-                }
-            }
-        }
-    }
+    
 
     public void Start()
     {

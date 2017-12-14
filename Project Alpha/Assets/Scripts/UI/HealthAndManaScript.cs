@@ -26,8 +26,8 @@ public class HealthAndManaScript : MonoBehaviour
 
     void Update()
     {
-        healthText.text = "" + characterStats.currentHealth + " / " + characterStats.maxHealth;
-        manaText.text = "" + characterStats.currentMana + " / " + characterStats.maxMana;
+        healthText.text = "" + characterStats.currentHealth + " / " + characterStats.maxHealth + " HP";
+        manaText.text = "" + characterStats.currentMana + " / " + characterStats.maxMana + " MP";
 
         if (characterStats.currentHealth < characterStats.maxHealth)
         {
