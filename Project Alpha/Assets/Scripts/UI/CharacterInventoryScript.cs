@@ -279,7 +279,7 @@ public class CharacterInventoryScript : MonoBehaviour
         }
 
     }
-    void OpenInventoryCanvas()
+    public void OpenInventoryCanvas()
     {
         if (playerHasInstantiatedInventoryCanvas)
         {
@@ -293,7 +293,7 @@ public class CharacterInventoryScript : MonoBehaviour
             playerHasInstantiatedInventoryCanvas = true;
         }
     }
-    void OpenEquipmentCanvas()
+    public void OpenEquipmentCanvas()
     {
         if (playerHasInstantiatedEquipmentCanvas)
         {
@@ -326,34 +326,5 @@ public class CharacterInventoryScript : MonoBehaviour
                 equipmentCanvas.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 50.0f))
-            {
-                if (hit.transform != null)
-                {
-                    if(hit.transform.gameObject.GetComponent<CharacterInventoryScript>())
-                    {
-                        hit.transform.gameObject.GetComponent<CharacterInventoryScript>().OpenInventoryCanvas();
-                    }
-                    if(hit.transform.gameObject.GetComponent<ShopScript>())
-                    {
-                        hit.transform.gameObject.GetComponent<ShopScript>().OpenInventoryCanvas();
-                    }
-                    if(hit.transform.gameObject.GetComponent<QuestGiverScript>())
-                    {
-                        hit.transform.gameObject.GetComponent<QuestGiverScript>().OnPress(gameObject);
-                    }
-                    if (hit.transform.gameObject.GetComponent<QuestTalkScript>())
-                    {
-                        hit.transform.gameObject.GetComponent<QuestTalkScript>().OnPress(gameObject);
-                    }
-
-                }
-            }
-
-        }
     }
 }
