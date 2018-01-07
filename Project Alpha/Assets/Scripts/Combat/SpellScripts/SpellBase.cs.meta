@@ -1,12 +1,16 @@
 fileFormatVersion: 2
 guid: 63fbdd14f18ea4240bd8ea77c5142c30
-timeCreated: 1511164653
+timeCreated: 1514809529
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
-  executionOrder: 0
+  defaultReferences:
+  - deathEffect: {instanceID: 0}
+  - spellEffect: {fileID: 1408088133065016, guid: 8e5f8ac03e4b7704a9bfb6e39346f36e,
+      type: 2}
+  - caster: {instanceID: 0}
+  executionOrder: -20
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

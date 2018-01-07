@@ -26,7 +26,6 @@ public class CharacterInventoryScript : MonoBehaviour
         if (!ItemManager)
             ItemManager = GameObject.Find("Item Manager").GetComponent<ItemManagerScript>();
         InventoryStorage[inventorySlot] = ItemManager.InventoryItemList[itemid];
-        InventoryItemAmount[inventorySlot] = 1;
         InventoryItemAmount[inventorySlot] = itemamount;
     }
     public void SetEquipmentItem(int equipmentSlot, int itemid)
@@ -43,6 +42,7 @@ public class CharacterInventoryScript : MonoBehaviour
             if (InventoryStorage[i] == null)
             {
                 SetInvenoryItem(i, 3);
+                InventoryItemAmount[i] = 0;
             }
         }
         for (int i = 0; i < EquipmentStorage.Length; i++)
@@ -181,11 +181,11 @@ public class CharacterInventoryScript : MonoBehaviour
                 {
                     target.GetComponent<CharacterStatsScript>().currentMana += ItemManager.InventoryItemList[itemid].healRating;
                 }
+                FindObjectOfType<AudioPlayerScript>().PlayAudio("Drink", GameObject.Find("Player").transform.position);
                 break;
 
-            case ItemManagerScript.InventoryItem.ItemType.weapon:
-                if (ItemManager.InventoryItemList[itemid].weaponType == ItemManagerScript.InventoryItem.WeaponType.sword)
-                {
+            case ItemManagerScript.InventoryItem.ItemType.weapon:              
+               {
                     int temp = EquipmentStorage[3].itemId;
                     SetEquipmentItem(3, itemid);
                     EquipmentStorage[3].itemId = itemid;
@@ -203,53 +203,48 @@ public class CharacterInventoryScript : MonoBehaviour
             case ItemManagerScript.InventoryItem.ItemType.buff:
                 if(ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.intelligence)
                 {
-                    Intelligence intelligence = target.AddComponent<Intelligence>();
-                    print("added Intelligence");
-                    intelligence.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    intelligence.duration = ItemManager.InventoryItemList[itemid].duration;
-                }
-                else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.agility)
-                {
-                    Agility agility = new Agility();
-                    agility.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    agility.duration = ItemManager.InventoryItemList[itemid].duration;
-                    target.AddComponent<Agility>();
-                }
+                    ItemManagerScript.InventoryItem i = ItemManager.InventoryItemList[itemid];
+                    GameObject g = Instantiate((GameObject)Resources.Load("Spells/InvisibleSpell"));
+                    g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4, 2);
+                    g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
+
+                }                
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.strength)
                 {
-                    Strength strength = new Strength();
-                    strength.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    strength.duration = ItemManager.InventoryItemList[itemid].duration;
-                    target.AddComponent<Strength>();
+                    ItemManagerScript.InventoryItem i = ItemManager.InventoryItemList[itemid];
+                    GameObject g = Instantiate((GameObject)Resources.Load("Spells/InvisibleSpell"));
+                    g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4, 3);
+                    g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Vitality)
                 {
-                    Vitality vitality = new Vitality();
-                    vitality.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    vitality.duration = ItemManager.InventoryItemList[itemid].duration;
-                    target.AddComponent<Vitality>();
+                    ItemManagerScript.InventoryItem i = ItemManager.InventoryItemList[itemid];
+                    GameObject g = Instantiate((GameObject)Resources.Load("Spells/InvisibleSpell"));
+                    g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4, 1);
+                    g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Dexterity)
                 {
-                    Dexterity dexterity = new Dexterity();
-                    dexterity.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    dexterity.duration = ItemManager.InventoryItemList[itemid].duration;
-                    target.AddComponent<Dexterity>();
+                    ItemManagerScript.InventoryItem i = ItemManager.InventoryItemList[itemid];
+                    GameObject g = Instantiate((GameObject)Resources.Load("Spells/InvisibleSpell"));
+                    g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4, 5);
+                    g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Resistance)
                 {
-                    Resistance resistance = new Resistance();
-                    resistance.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    resistance.duration = ItemManager.InventoryItemList[itemid].duration;
-                    target.AddComponent<Resistance>();
+                    ItemManagerScript.InventoryItem i = ItemManager.InventoryItemList[itemid];
+                    GameObject g = Instantiate((GameObject)Resources.Load("Spells/InvisibleSpell"));
+                    g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4,6);
+                    g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
                 }
                 else if (ItemManager.InventoryItemList[itemid].attributeType == ItemManagerScript.InventoryItem.AttributeType.Luck)
                 {
-                    Luck luck = new Luck();
-                    luck.buffAmount = ItemManager.InventoryItemList[itemid].attributeBuff;
-                    luck.duration = ItemManager.InventoryItemList[itemid].duration;
-                    target.AddComponent<Luck>();
+                    ItemManagerScript.InventoryItem i = ItemManager.InventoryItemList[itemid];
+                    GameObject g = Instantiate((GameObject)Resources.Load("Spells/InvisibleSpell"));
+                    g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4, 4);
+                    g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
                 }
+                FindObjectOfType<AudioPlayerScript>().PlayAudio("Drink", GameObject.Find("Player").transform.position);
                 break;
         }
     }
@@ -324,6 +319,22 @@ public class CharacterInventoryScript : MonoBehaviour
                 OpenEquipmentCanvas();
             else
                 equipmentCanvas.SetActive(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape) && gameObject.GetComponent<PlayerController>())
+        {
+            if (inventoryCanvas.activeSelf)
+                inventoryCanvas.SetActive(false);
+            if (equipmentCanvas.activeSelf)
+                equipmentCanvas.SetActive(false);
+        }
+
+        for (int i = 0; i < InventoryStorage.Length; i++)
+        {
+            if (InventoryStorage[i].itemId == 3)
+            {
+                InventoryItemAmount[i] = 0;
+            }
         }
 
     }

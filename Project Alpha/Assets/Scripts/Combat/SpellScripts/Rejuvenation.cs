@@ -7,39 +7,43 @@ public class Rejuvenation : MonoBehaviour {
 
     bool canSetHealing = true;
     float duration;
-    float tickTimer = 3f;
+    float tickTimer = 1f;
     float tickHeal;
     CharacterStatsScript characterStats;
     PlayerController playerController;
-
+    float damage;
 
     void Start () {
         characterStats = GameObject.Find("Player").GetComponent<CharacterStatsScript>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-        duration = playerController.duration;
+        duration = transform.parent.GetComponent<SpellBase>().thisSpell.duration;
+        damage = transform.parent.GetComponent<SpellBase>().damage / duration;
 	}
-	
 
-	void Update () {
+
+    public void SpellUpdate()
+    {
 
         tickTimer -= Time.deltaTime;
         duration -= Time.deltaTime;
 
-        if(canSetHealing)
+        if (canSetHealing)
         {
-            tickHeal = Mathf.Round(playerController.baseHeal + (characterStats.intelligence * 1.5f));
+            tickHeal = damage;
             canSetHealing = false;
         }
 
-        
-        if(tickTimer <= 0)
+
+        if (tickTimer <= 0)
         {
             characterStats.currentHealth += (int)tickHeal;
-            tickTimer = 3f;
+            print("Healed Player For " + tickHeal + " HP!");
+            Instantiate(transform.parent.GetComponent<SpellBase>().deathEffect, GameObject.Find("Player").transform.position, Quaternion.identity);
+            tickTimer = 1f;
         }
-        if(duration <= 0)
+        if (duration <= 0)
         {
             Destroy(this);
         }
-	}
+    }
 }

@@ -308,8 +308,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1274287207644192}
-  m_LocalRotation: {x: -0, y: 0.9772948, z: -0, w: 0.21188428}
-  m_LocalPosition: {x: 986.6, y: 109.64, z: 1547.3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -22.569736, y: 11.5, z: 393.8802}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 4280222022381642}
@@ -737,8 +737,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 5, z: 2}
-  m_Center: {x: 0.3, y: 0.6, z: 0.4}
+  m_Size: {x: 3, y: 4, z: 2}
+  m_Center: {x: 0.3, y: 0, z: 0.4}
 --- !u!65 &65649982928124794
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -791,7 +791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be0535532f728145b2cceea4892cd23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  critPrefab: {fileID: 1273125902502414, guid: ff465dbfce9251b41b75a6b1e1321c13, type: 2}
+  textPrefab: {fileID: 1273125902502414, guid: ff465dbfce9251b41b75a6b1e1321c13, type: 2}
   baseCritChance: 10
   currentCritChance: 0
   statUI: {fileID: 0}
@@ -821,6 +821,8 @@ MonoBehaviour:
   baseHealth: 1000
   healthRegen: 0
   baseHealthRegen: 5
+  speed: 100
+  regenEnabled: 0
 --- !u!114 &114334825604456678
 MonoBehaviour:
   m_ObjectHideFlags: 1

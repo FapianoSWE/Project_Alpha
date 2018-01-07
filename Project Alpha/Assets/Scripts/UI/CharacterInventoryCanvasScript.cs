@@ -19,6 +19,12 @@ public class CharacterInventoryCanvasScript : MonoBehaviour
     {
         owner = null;
     }
+
+    public void OnExitPress()
+    {
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", GameObject.Find("Player").transform.position);
+        //transform.parent.parent.gameObject.SetActive(false);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -120,6 +126,7 @@ public class CharacterInventoryCanvasScript : MonoBehaviour
     }
     public void OnItemPress(int itemslot)
     {
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", GameObject.Find("Player").transform.position);
         if (owner.GetComponent<ShopScript>())
         {
             owner.GetComponent<ShopScript>().OnPurchase(owner.GetComponent<ShopScript>().ShopInventory[itemslot].itemId);
@@ -201,9 +208,19 @@ public class CharacterInventoryCanvasScript : MonoBehaviour
                         {
                             if (Input.GetKey(KeyCode.LeftShift))
                             {
-                                if ((temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] + owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot]) <= temp.GetComponent<CharacterInventoryScript>().InventoryStorage[i].itemMaxAmount)
+                                    temp.GetComponent<CharacterInventoryScript>().SetInvenoryItem(i, owner.GetComponent<CharacterInventoryScript>().InventoryStorage[itemslot].itemId);
+                                    temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] = owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot];            
+                                    owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] = 0;
+                                    owner.GetComponent<CharacterInventoryScript>().SetInvenoryItem(itemslot, 3);
+                                    isFinished = true;
+                                    break;                               
+                            }
+                            else
+                            {
+                                if(owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] == 1)
                                 {
-                                    temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] += owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot];
+                                    temp.GetComponent<CharacterInventoryScript>().SetInvenoryItem(i, owner.GetComponent<CharacterInventoryScript>().InventoryStorage[itemslot].itemId);
+                                    temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] = owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot];
                                     owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] = 0;
                                     owner.GetComponent<CharacterInventoryScript>().SetInvenoryItem(itemslot, 3);
                                     isFinished = true;
@@ -211,24 +228,17 @@ public class CharacterInventoryCanvasScript : MonoBehaviour
                                 }
                                 else
                                 {
-                                    int tempInt = temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] + owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] - owner.GetComponent<CharacterInventoryScript>().InventoryStorage[i].itemMaxAmount;
-                                    print(tempInt + "=" + temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] + "+" + owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] + "-" + owner.GetComponent<CharacterInventoryScript>().InventoryStorage[i].itemMaxAmount);
-                                    temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] += owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] - tempInt;
-                                    owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] = tempInt;
+                                    temp.GetComponent<CharacterInventoryScript>().SetInvenoryItem(i, owner.GetComponent<CharacterInventoryScript>().InventoryStorage[itemslot].itemId);
+                                    temp.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i]++;
+                                    owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot]--;
+                                    if (owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] <= 0)
+                                    {
+                                        owner.GetComponent<CharacterInventoryScript>().SetInvenoryItem(itemslot, 3);
+                                    }
                                     isFinished = true;
                                     break;
                                 }
-                            }
-                            else
-                            {
-                                temp.GetComponent<CharacterInventoryScript>().SetInvenoryItem(i, owner.GetComponent<CharacterInventoryScript>().InventoryStorage[itemslot].itemId);
-                                owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot]--;
-                                if (owner.GetComponent<CharacterInventoryScript>().InventoryItemAmount[itemslot] <= 0)
-                                {
-                                    owner.GetComponent<CharacterInventoryScript>().SetInvenoryItem(itemslot, 3);
-                                }
-                                isFinished = true;
-                                break;
+
                             }
                         }
                     }

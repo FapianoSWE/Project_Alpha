@@ -17,7 +17,7 @@ public class PushSpellScript : MonoBehaviour {
     void Update()
     {
         lifetime += Time.deltaTime;
-        transform.localScale *= 1.5f;
+        transform.localScale *= 1.2f;
         if (lifetime >= lifetimeLength)
         {
             Destroy(gameObject);

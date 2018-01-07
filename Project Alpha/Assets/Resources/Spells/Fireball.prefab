@@ -39,8 +39,8 @@ GameObject:
   - component: {fileID: 33028294457955464}
   - component: {fileID: 135570410762652218}
   - component: {fileID: 23845295763717210}
-  - component: {fileID: 114984497001776290}
   - component: {fileID: 54094715183583300}
+  - component: {fileID: 114493703738106252}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Spell
@@ -131,7 +131,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &114984497001776290
+--- !u!114 &114493703738106252
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -139,18 +139,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1744996512719606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89619080ca3e8604b94ba9c41407e341, type: 3}
+  m_Script: {fileID: 11500000, guid: 63fbdd14f18ea4240bd8ea77c5142c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetimeLength: 5
-  baseDamage: 50
-  damage: 50
-  casterLuck: 0
-  deathEffect: {fileID: 1700788653850586, guid: ea4713aeba4dde34d9f6c66605b9737e,
-    type: 2}
-  caster: 
+  lifetimeLength: 0
+  baseDamage: 0
+  damage: 0
+  deathEffect: {fileID: 0}
   enemyCaster: 0
-  speed: 2
+  speed: 0
+  caster: {fileID: 0}
 --- !u!135 &135570410762652218
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -207,7 +205,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       scalar: 2
-      minScalar: 0
+      minScalar: 0.0001
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -652,11 +650,11 @@ ParticleSystem:
     m_Rotation: {x: 0, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
+    m_MeshMaterialIndex: 0
+    m_MeshNormalOffset: 0
     m_Mesh: {fileID: 0}
     m_MeshRenderer: {fileID: 0}
     m_SkinnedMeshRenderer: {fileID: 0}
-    m_MeshMaterialIndex: 0
-    m_MeshNormalOffset: 0
     m_UseMeshMaterialIndex: 0
     m_UseMeshColors: 1
     alignToDirection: 0
@@ -1337,6 +1335,47 @@ ParticleSystem:
           time: 1
           value: 0.5
           inSlope: 0.5
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    speedModifier:
+      serializedVersion: 2
+      minMaxState: 0
+      scalar: 1
+      minScalar: 1
+      maxCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
           outSlope: 0
           tangentMode: 0
         m_PreInfinity: 2
@@ -2697,6 +2736,7 @@ ParticleSystem:
     maxLights: 20
   TrailModule:
     enabled: 0
+    mode: 0
     ratio: 1
     lifetime:
       serializedVersion: 2
@@ -2741,12 +2781,14 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    ribbonCount: 1
     worldSpace: 0
     dieWithParticles: 1
     sizeAffectsWidth: 1
     sizeAffectsLifetime: 0
     inheritParticleColor: 1
     generateLightingData: 0
+    splitSubEmitterRibbons: 0
     colorOverLifetime:
       serializedVersion: 2
       minMaxState: 0

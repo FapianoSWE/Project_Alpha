@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 13785b53689b54f44b1bf5370dcffcbd
+timeCreated: 1515083565
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - audioPlayerPrefab: {fileID: 1855721156733446, guid: e450c51b471732a45aaf081830aeb29c,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

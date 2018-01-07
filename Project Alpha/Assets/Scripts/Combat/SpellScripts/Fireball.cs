@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fireball : MonoBehaviour {
+public class Fireball :  MonoBehaviour {
 
     float lifetime;
     public float lifetimeLength;

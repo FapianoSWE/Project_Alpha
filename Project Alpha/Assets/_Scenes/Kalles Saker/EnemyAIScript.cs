@@ -58,6 +58,11 @@ public class EnemyAIScript : MonoBehaviour
 
     SpellDatabase spellDatabase;
 
+    GameObject currentSpellObject;
+
+    int id;
+    float duration;
+
     public enum EnemyAIType
     {
         Melee,
@@ -83,12 +88,10 @@ public class EnemyAIScript : MonoBehaviour
 
     void OnCollisionEnter(Collision c)
     {
-        string[] chars = c.gameObject.name.Split('(');
 
-        if (c.gameObject.tag == "Spell" && (GameObject)c.gameObject.GetComponent(chars[0]).GetType().GetField("caster")
-            .GetValue(c.gameObject.GetComponent(chars[0])) != gameObject)
+        if (c.gameObject.tag == "Spell" && c.gameObject.GetComponent<SpellBase>().caster != gameObject)
         {
-            if (!(bool)c.gameObject.GetComponent(chars[0]).GetType().GetField("enemyCaster").GetValue(c.gameObject.GetComponent(chars[0])))
+            if (!c.gameObject.GetComponent<SpellBase>().enemyCaster)
             {
                 GameObject temp = Instantiate(AggroZone, gameObject.transform);
                 temp.transform.localPosition = new Vector3(0, 0, 0);
@@ -102,20 +105,10 @@ public class EnemyAIScript : MonoBehaviour
                 }
                 
 
-                foreach (Spells spell in spellDatabase.masterSpellBook)
-                {
-                    if (c.gameObject.name == spell.spellName)
-                    {
-                        GetComponent<CharacterStatsScript>().TakeDamage(((float)c.gameObject.GetComponent(
-                            chars[0]).GetType().GetField("damage").GetValue(c.gameObject.GetComponent(chars[0]))));
-                    }
-                }
-                Instantiate(c.gameObject.GetComponent(chars[0]).GetType().GetField("deathEffect").GetValue(c.gameObject.GetComponent(chars[0])) as GameObject, gameObject.transform.position, Quaternion.identity, null);
-
                 if (poiseTimer == 0)
                     poiseTimer = 1;
 
-                poisedamage += c.gameObject.GetComponent<Fireball>().damage - (GetComponent<CharacterStatsScript>().resistance * 2);
+                poisedamage += c.gameObject.GetComponent<SpellBase>().damage - (GetComponent<CharacterStatsScript>().resistance * 2);
 
                 if (poisedamage > poise)
                 {
@@ -473,19 +466,19 @@ public class EnemyAIScript : MonoBehaviour
         
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyBackStepAnim"))
         {
-            GetComponent<Rigidbody>().velocity = transform.forward * (-5 * Speed);
+            GetComponent<Rigidbody>().velocity = transform.forward * (-5 * (Speed * (GetComponent<CharacterStatsScript>().speed / 100)));
         }
         else if (animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyAttackMoveForward"))
         {
-            GetComponent<Rigidbody>().velocity = transform.forward * (5 * Speed);
+            GetComponent<Rigidbody>().velocity = transform.forward * (5 * (Speed * (GetComponent<CharacterStatsScript>().speed / 100)));
         }
         else if (animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyMoveAnim"))
         {
-            GetComponent<Rigidbody>().velocity = transform.forward * (10 * Speed);
+            GetComponent<Rigidbody>().velocity = transform.forward * (10 * (Speed * (GetComponent<CharacterStatsScript>().speed / 100)));
         }
         else if (animator.GetCurrentAnimatorStateInfo(0).IsName("EnemySideStepAnim"))
         {
-            GetComponent<Rigidbody>().velocity = transform.right * (5* Speed);
+            GetComponent<Rigidbody>().velocity = transform.right * (5* (Speed * (GetComponent<CharacterStatsScript>().speed / 100)));
         }
         else if (animator.GetCurrentAnimatorStateInfo(0).IsName("EnemySideStepAnim2"))
         {
@@ -502,8 +495,9 @@ public class EnemyAIScript : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 300))
         {
             if(hit.transform.gameObject.name != "Player")
-            {             
-                GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, -hit.distance * 0.5f, GetComponent<Rigidbody>().velocity.z);
+            {
+                //GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, -hit.distance * 0.5f, GetComponent<Rigidbody>().velocity.z);
+                transform.position = new Vector3(transform.position.x, (GetComponent<BoxCollider>().size.y/2)*transform.localScale.y  + hit.point.y,transform.position.z);
             }
         }
     }
@@ -512,17 +506,14 @@ public class EnemyAIScript : MonoBehaviour
         if (target == null)
             target = other.gameObject.transform.parent.transform;
 
-        if (target.GetComponent<EnemyAIScript>())
+        if (other.GetComponent<EnemyAIScript>())
             return;
 
         other.gameObject.GetComponent<AttackZoneScript>().timer = 0;
         GetComponent<CharacterStatsScript>().TakeDamage(other.transform.parent.GetComponent<CharacterStatsScript>().DealDamage(other.transform.parent.GetComponent<CharacterStatsScript>().strength,CharacterStatsScript.DamageTypes.Melee));
-        print("Melee Hit!");
 
         if (poiseTimer == 0)
             poiseTimer = 1;
-
-        
 
         if (poisedamage > poise)
         {
@@ -532,22 +523,14 @@ public class EnemyAIScript : MonoBehaviour
             BackStepCooldown = BackStepCoolDownTime;
         }
 
-
+       
         returnToSpawn = false;
 
     }
     public void CastSpell()
-    {
-
-        
-        if(SpellToCast == "Fireball")
-        {
-            GameObject temp;
-            temp = Instantiate(Resources.Load("Spells/Fireball") as GameObject, transform.position + transform.forward * 5, gameObject.transform.rotation);
-            temp.GetComponent<Fireball>().caster = gameObject;
-            temp.GetComponent<Fireball>().enemyCaster = true;
-        }   
-        else if(SpellToCast == "PushSpell")
+    {      
+     
+        if(SpellToCast == "PushSpell")
         {
             GameObject temp;
             temp = Instantiate(Resources.Load("Spells/EnemySpells/PushSpell") as GameObject, transform.position + new Vector3(0,1,0), Quaternion.identity);
@@ -561,7 +544,32 @@ public class EnemyAIScript : MonoBehaviour
 
             temp.transform.position = new Vector3(playerPos.x + Random.Range(-10, 10), playerPos.y + 1, playerPos.z + Random.Range(-10, 10));
         }
-
+        else if (SpellToCast != null)
+        {
+            GameObject temp;
+            SpellDatabase s = GameObject.Find("SpellObjects").GetComponent<SpellDatabase>();
+            for (int i = 0; i < s.masterSpellBook.Count; i++)
+            {
+                if (s.masterSpellBook[i].spellName == SpellToCast)
+                {
+                    id = i;
+                }
+            }
+            temp = Instantiate(Resources.Load("Spells/" + s.masterSpellBook[id].objectName) as GameObject, transform.position + transform.forward * 5, gameObject.transform.rotation);
+            currentSpellObject = temp;
+            duration = findSpell(id).duration;
+            currentSpellObject.GetComponent<SpellBase>().SpellId = id;
+            currentSpellObject.GetComponent<SpellBase>().caster = gameObject;
+            temp.GetComponent<SpellBase>().caster = gameObject;
+            temp.GetComponent<SpellBase>().enemyCaster = true;
+        }
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("SpellCast", transform.position);
         MagicCooldown = MagicCoolDownTime;
+    }
+
+    public Spells findSpell(int id)
+    {
+        Spells temp = GameObject.Find("SpellObjects").GetComponent<SpellDatabase>().masterSpellBook[id];
+        return temp;
     }
 }

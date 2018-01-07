@@ -11,7 +11,7 @@ public class CharacterStatsScript : MonoBehaviour
          health,
          mana;
 
-    public GameObject critPrefab;
+    public GameObject textPrefab;
 
     public int baseCritChance = 10,
                currentCritChance;
@@ -81,6 +81,10 @@ public class CharacterStatsScript : MonoBehaviour
         healthRegen,
         baseHealthRegen = 5;
 
+    public float speed = 100;
+
+    public bool regenEnabled;
+
     public void Start()
     {
         statUI = GameObject.FindGameObjectWithTag("StatContainer").GetComponent<StatUIScript>();
@@ -130,6 +134,7 @@ public class CharacterStatsScript : MonoBehaviour
         xpNeeded = currentLevel * baseXpNeeded;
         attributePoints += 3;
         leveledUp = true;
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("LevelUp", transform.position);
     }
 
     public float DealDamage(float baseDamage, DamageTypes _DamageType)
@@ -139,36 +144,39 @@ public class CharacterStatsScript : MonoBehaviour
             if (_DamageType == DamageTypes.Melee)
             {
                 float damage;
-                damage = baseDamage + ((strength * 2)) + GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating;
+            if (GetComponent<CharacterInventoryScript>().EquipmentStorage[3].weaponType == ItemManagerScript.InventoryItem.WeaponType.sword)
+                damage = baseDamage * (0.9f + ((float)strength / 10)) + GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating;
+            else
+                damage = baseDamage * (0.9f + ((float)strength / 10));
 
                 if (crit <= currentCritChance)
                 {
                     damage *= 2;
-                    Instantiate(critPrefab, transform.position, Quaternion.identity, null);
                 }
                 return damage;
             }
             else if (_DamageType == DamageTypes.Ranged)
             {
                 float damage;
-                damage = baseDamage + ((agility * 2)); //+ GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating);
+                damage = baseDamage * (0.9f + ((float)agility / 10)); //+ GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating);
 
-                if (crit <= currentCritChance)
+            if (crit <= currentCritChance)
                 {
                     damage *= 2;
-                    Instantiate(critPrefab, transform.position, Quaternion.identity, null);
                 }
                 return damage;
             }
             else if (_DamageType == DamageTypes.Magic)
             {
                 float damage;
-                damage = baseDamage + (intelligence * 2);
+            if (!GetComponent<EnemyAIScript>() && GetComponent<CharacterInventoryScript>().EquipmentStorage[3].weaponType == ItemManagerScript.InventoryItem.WeaponType.staff)
+                damage = baseDamage * (0.9f + ((float)intelligence / 10) + ((float)GetComponent<CharacterInventoryScript>().EquipmentStorage[3].attackRating / 10));
+            else
+                damage = baseDamage * (0.9f + ((float)intelligence / 10));
 
                 if (crit <= currentCritChance)
                 {
                     damage *= 2;
-                    Instantiate(critPrefab, transform.position, Quaternion.identity, null);
                 }
                 return damage;
             }
@@ -185,17 +193,31 @@ public class CharacterStatsScript : MonoBehaviour
                 armor += i.armorRating;
             }
             currentHealth -= (int)(incomingDamage - ((resistance * 2)+ armor));
+            regenTimer = 3;
         }
         else if(!IsPlayer)
         {
-            currentHealth -= (int)(incomingDamage - (resistance * 2));
+            currentHealth -= Mathf.RoundToInt(incomingDamage - (resistance * 2));
+            GameObject t = Instantiate(textPrefab,transform.position,GameObject.Find("Player").transform.rotation);
+            t.GetComponent<TextPrefabScript>().Initialize(Mathf.RoundToInt(incomingDamage - (resistance * 2)).ToString(), Color.red);
+           
         }
         
     }
 
     public void Healed(float incomingHeal)
     {
-            currentHealth += incomingHeal + (intelligence * 2);
+        currentHealth += incomingHeal;
+        if(!IsPlayer)
+        {
+            GameObject t = Instantiate(textPrefab, transform.position, GameObject.Find("Player").transform.rotation);
+            t.GetComponent<TextPrefabScript>().Initialize(incomingHeal.ToString(), Color.green);
+        }
+
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
     }
 
     public void GainXP(int xpGained)
@@ -209,6 +231,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             intelligence += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
 
@@ -218,6 +241,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             strength += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
 
@@ -227,6 +251,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             dexterity += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
 
@@ -236,6 +261,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             vitality += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
 
@@ -245,6 +271,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             resistance += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
 
@@ -254,6 +281,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             luck += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
 
@@ -263,6 +291,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             agility += 1;
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
         }
     }
     
@@ -283,11 +312,19 @@ public class CharacterStatsScript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Keypad0))
         {
-            GainXP(10);
+            GainXP(50);
         }
         if (Input.GetKey(KeyCode.Keypad1))
         {
             gold++;
+        }
+        if (Input.GetKey(KeyCode.Keypad2))
+        {
+            currentHealth--;
+        }
+        if (Input.GetKey(KeyCode.Keypad3))
+        {
+            regenEnabled = !regenEnabled;
         }
         regenTimer -= Time.deltaTime;
             maxHealth = (baseHealth * currentLevel + (vitality * 10)) - 10;
@@ -304,11 +341,11 @@ public class CharacterStatsScript : MonoBehaviour
                 leveledUp = false;
             }
 
-            if (regenTimer <= 0)
+            if (regenTimer <= 0 && IsPlayer && regenEnabled)
             {
                 currentHealth += healthRegen;
                 currentMana += manaRegen;
-                regenTimer = 1;
+                regenTimer = 3;
             }
 
             if (currentHealth > maxHealth)

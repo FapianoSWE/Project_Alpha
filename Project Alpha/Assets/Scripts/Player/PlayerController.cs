@@ -121,16 +121,20 @@ public class PlayerController : MonoBehaviour
     
     public void DebugChest()
     {
+        int x = 0;
         for (int i = 0; i < FindObjectOfType<ItemManagerScript>().InventoryItemList.Count; i++)
         {
-            if(i % 16 == 0)
+            if (i % 16 == 0)
             {
                 tempChest = Instantiate(chestPrefab);
 
-                tempChest.transform.position = gameObject.transform.position + (transform.forward * 2) + transform.up;              
+                tempChest.transform.position = gameObject.transform.position + (transform.forward * 2) + (transform.up *(((i+1)/16)*5));
+                if(x>=16)
+                x = 0;
             }         
-            tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[i] = FindObjectOfType<ItemManagerScript>().InventoryItemList[i];
-            tempChest.GetComponent<CharacterInventoryScript>().InventoryItemAmount[i] = tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[i].itemMaxAmount;
+            tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[x] = FindObjectOfType<ItemManagerScript>().InventoryItemList[i];
+            tempChest.GetComponent<CharacterInventoryScript>().InventoryItemAmount[x] = tempChest.GetComponent<CharacterInventoryScript>().InventoryStorage[x].itemMaxAmount;
+            x++;
         }
     }
 
@@ -247,12 +251,13 @@ public class PlayerController : MonoBehaviour
             }
             if (grounded && canMove && !itemCanvasOpen)
             {
+
                 isJumping = false;
 
                 moveDirection = new Vector3((Input.GetAxis("Horizontal")), 0, Input.GetAxis("Vertical"));
 
                 moveDirection = transform.TransformDirection(moveDirection);
-                moveDirection *= runSpeed;
+                moveDirection *= (runSpeed * (GetComponent<CharacterStatsScript>().speed/100));
 
 
                 if (moveDirection != Vector3.zero)
@@ -319,12 +324,12 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(0) && canMove && coolDown <= 0 && !itemCanvasOpen)
+        if (Input.GetMouseButtonDown(0) && canMove && coolDown <= 0 && !FindObjectOfType<MenuOpenScript>().MenuOpen)
             {
                 AttackZone.SetActive(true);
                 coolDown = attackCoolDown;
-
-            }
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Swipe", transform.position);
+        }
 
 
         if (castStates == CastStates.casting)
@@ -333,9 +338,6 @@ public class PlayerController : MonoBehaviour
             if (castTimer <= 0)
             {
                 GameObject temp = Instantiate(currentSpellObject, transform.position + transform.forward * 2, Quaternion.identity);
-                if (currentSpellObject.GetComponent<Fireball>())
-                    currentSpellObject.GetComponent<Fireball>().caster = gameObject;
-
                 temp.transform.rotation = transform.rotation;
                 castStates = CastStates.notCasting;
                 castTimer = -1;
@@ -353,7 +355,15 @@ public class PlayerController : MonoBehaviour
             {
             if (Input.GetKeyDown(hotBar[i]) && castStates != CastStates.casting)
                 {
+                if (GameObject.Find("SpellObjects").GetComponent<SpellDatabase>().localSpellBook.Contains(GameObject.Find("SpellObjects").GetComponent<SpellDatabase>().masterSpellBook[hotbarGameobject[i].GetComponent<HotbarSpellId>().spellId]))
+                {
                     CastSpell(hotbarGameobject[i].GetComponent<HotbarSpellId>().spellId);
+                }
+                else
+                {
+                    print("You Don't Know This Spell Yet!");
+                }
+
                 }
             }
 
@@ -369,13 +379,9 @@ public class PlayerController : MonoBehaviour
             }
         
             
-            if (Input.GetKeyDown(KeyCode.Escape) && menuActive == false)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                menuActive = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                menuActive = false;
+                menuActive = !menuActive;
             }
     }
 
@@ -386,15 +392,15 @@ public class PlayerController : MonoBehaviour
     
     public void CastSpell(int id)
     {
-        if(GetComponent<CharacterStatsScript>().currentMana > findSpell(id).manacost)
+        if(GetComponent<CharacterStatsScript>().currentMana >= findSpell(id).manacost)
         {
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("SpellCast", transform.position);
             castTimer = findSpell(id).castTime;
-            currentSpellObject = Resources.Load("Spells/" + findSpell(id).spellName) as GameObject;
+            currentSpellObject = Resources.Load("Spells/" + findSpell(id).objectName) as GameObject;
             duration = findSpell(id).duration;
-            baseDamage = findSpell(id).baseDamage;
-            baseHeal = findSpell(id).baseHealing;
-            isProjectile = findSpell(id).isProjectile;
             GetComponent<CharacterStatsScript>().currentMana -= findSpell(id).manacost;
+            currentSpellObject.GetComponent<SpellBase>().SpellId = id;
+            currentSpellObject.GetComponent<SpellBase>().caster = gameObject;
             castStates = CastStates.casting;
         }
     }
@@ -407,21 +413,16 @@ public class PlayerController : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name == "AttackZone")
+        if(other.gameObject.name == "AttackZone" && other.transform.parent.name != "Player")
         {
             GetComponent<CharacterStatsScript>().TakeDamage(other.transform.parent.transform.parent.GetComponent<CharacterStatsScript>().strength * 5);
-        }
-        if (other.gameObject.name == "Heal(Clone)")
-        {
-            //GetComponent<CharacterStatsScript>().Healed(Mathf.RoundToInt((other.transform.GetComponent<HealSpellScript>().heal)/(other.gameObject.transform.localScale.x)));
         }
     }
     private void OnCollisionEnter(Collision c)
     {
         if (c.gameObject.tag == "Spell")
         {
-            Instantiate(c.gameObject.GetComponent<Fireball>().deathEffect, gameObject.transform.position, Quaternion.identity, null);
-            GetComponent<CharacterStatsScript>().TakeDamage(c.gameObject.GetComponent<Fireball>().damage);
+
         }
         if(c.gameObject.GetComponent<PushSpellScript>())
         {
