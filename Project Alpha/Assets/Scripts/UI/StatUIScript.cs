@@ -20,7 +20,7 @@ public class StatUIScript : MonoBehaviour
     void Start ()
     {
         statsActive = false;
-        //characterStats = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStatsScript>();
+        characterStats = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStatsScript>();
 	}
 	
 	void Update ()
