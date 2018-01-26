@@ -946,10 +946,10 @@ MonoBehaviour:
   baseMana: 150
   baseManaRegen: 5
   manaRegen: 5
-  currentHealth: 100
-  maxHealth: 100
+  currentHealth: 50
+  maxHealth: 50
   damageTaken: 0
-  baseHealth: 100
+  baseHealth: 50
   healthRegen: 0
   baseHealthRegen: 2
   speed: 100

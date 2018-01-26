@@ -572,4 +572,13 @@ public class EnemyAIScript : MonoBehaviour
         Spells temp = GameObject.Find("SpellObjects").GetComponent<SpellDatabase>().masterSpellBook[id];
         return temp;
     }
+
+    public void OnDestroy()
+    {
+        if(FindObjectOfType<EnemyHealthBar>().enemyObject == gameObject)
+        {
+            FindObjectOfType<EnemyHealthBar>().enemyObject = null;
+        }
+
+    }
 }

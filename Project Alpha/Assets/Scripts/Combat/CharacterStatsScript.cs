@@ -87,6 +87,7 @@ public class CharacterStatsScript : MonoBehaviour
 
     public void Start()
     {
+
         statUI = GameObject.FindGameObjectWithTag("StatContainer").GetComponent<StatUIScript>();
 
         if(IsPlayer)
@@ -197,6 +198,7 @@ public class CharacterStatsScript : MonoBehaviour
         }
         else if(!IsPlayer)
         {
+            FindObjectOfType<EnemyHealthBar>().enemyObject = gameObject;
             currentHealth -= Mathf.RoundToInt(incomingDamage - (resistance * 2));
             GameObject t = Instantiate(textPrefab,transform.position,GameObject.Find("Player").transform.rotation);
             t.GetComponent<TextPrefabScript>().Initialize(Mathf.RoundToInt(incomingDamage - (resistance * 2)).ToString(), Color.red);
