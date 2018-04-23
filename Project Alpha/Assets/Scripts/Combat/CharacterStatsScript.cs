@@ -135,7 +135,7 @@ public class CharacterStatsScript : MonoBehaviour
         xpNeeded = currentLevel * baseXpNeeded;
         attributePoints += 3;
         leveledUp = true;
-        FindObjectOfType<AudioPlayerScript>().PlayAudio("LevelUp", transform.position);
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("LevelUp", transform.position, false);
     }
 
     public float DealDamage(float baseDamage, DamageTypes _DamageType)
@@ -199,6 +199,7 @@ public class CharacterStatsScript : MonoBehaviour
         else if(!IsPlayer)
         {
             FindObjectOfType<EnemyHealthBar>().enemyObject = gameObject;
+            FindObjectOfType<EnemyHealthBar>().lastUpdated = 0;
             currentHealth -= Mathf.RoundToInt(incomingDamage - (resistance * 2));
             GameObject t = Instantiate(textPrefab,transform.position,GameObject.Find("Player").transform.rotation);
             t.GetComponent<TextPrefabScript>().Initialize(Mathf.RoundToInt(incomingDamage - (resistance * 2)).ToString(), Color.red);
@@ -233,7 +234,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             intelligence += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
 
@@ -243,7 +244,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             strength += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
 
@@ -253,7 +254,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             dexterity += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
 
@@ -263,7 +264,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             vitality += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
 
@@ -273,7 +274,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             resistance += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
 
@@ -283,7 +284,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             luck += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
 
@@ -293,7 +294,7 @@ public class CharacterStatsScript : MonoBehaviour
         {
             attributePoints -= 1;
             agility += 1;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", transform.position, false);
         }
     }
     
@@ -301,7 +302,7 @@ public class CharacterStatsScript : MonoBehaviour
     public void Update()
     {
 
-        if(Input.GetKeyDown(KeyCode.KeypadPlus))
+        if(Input.GetKeyDown(KeyCode.KeypadPlus) && gameObject.GetComponent<PlayerController>().debugMode)
         {
             agility = 1000;
             strength = 1000;
@@ -312,19 +313,19 @@ public class CharacterStatsScript : MonoBehaviour
             currentLevel = 1000;
         }
 
-        if (Input.GetKey(KeyCode.Keypad0))
+        if (Input.GetKey(KeyCode.Keypad0) && gameObject.GetComponent<PlayerController>().debugMode)
         {
             GainXP(50);
         }
-        if (Input.GetKey(KeyCode.Keypad1))
+        if (Input.GetKey(KeyCode.Keypad1) && gameObject.GetComponent<PlayerController>().debugMode)
         {
             gold++;
         }
-        if (Input.GetKey(KeyCode.Keypad2))
+        if (Input.GetKey(KeyCode.Keypad2) && gameObject.GetComponent<PlayerController>().debugMode)
         {
             currentHealth--;
         }
-        if (Input.GetKey(KeyCode.Keypad3))
+        if (Input.GetKey(KeyCode.Keypad3) && gameObject.GetComponent<PlayerController>().debugMode)
         {
             regenEnabled = !regenEnabled;
         }

@@ -63,6 +63,8 @@ public class EnemyAIScript : MonoBehaviour
     int id;
     float duration;
 
+    public string Name;
+
     public enum EnemyAIType
     {
         Melee,
@@ -77,7 +79,6 @@ public class EnemyAIScript : MonoBehaviour
         playerController = GameObject.Find("Player").GetComponent<CharacterController>();
         spawnPoint = transform.position;
         level = Random.Range(1, 100);
-        xpWorth = 50;
         MeleeAttackCooldown = MeleeAttackCooldownTime;
         animator.Play("EnemyIdleAnim");
 
@@ -563,7 +564,7 @@ public class EnemyAIScript : MonoBehaviour
             temp.GetComponent<SpellBase>().caster = gameObject;
             temp.GetComponent<SpellBase>().enemyCaster = true;
         }
-        FindObjectOfType<AudioPlayerScript>().PlayAudio("SpellCast", transform.position);
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("SpellCast", transform.position, true);
         MagicCooldown = MagicCoolDownTime;
     }
 

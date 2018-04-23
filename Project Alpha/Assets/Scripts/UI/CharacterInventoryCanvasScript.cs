@@ -22,7 +22,7 @@ public class CharacterInventoryCanvasScript : MonoBehaviour
 
     public void OnExitPress()
     {
-        FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", GameObject.Find("Player").transform.position);
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", GameObject.Find("Player").transform.position, false);
         //transform.parent.parent.gameObject.SetActive(false);
     }
     // Update is called once per frame
@@ -126,7 +126,7 @@ public class CharacterInventoryCanvasScript : MonoBehaviour
     }
     public void OnItemPress(int itemslot)
     {
-        FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", GameObject.Find("Player").transform.position);
+        FindObjectOfType<AudioPlayerScript>().PlayAudio("Button", GameObject.Find("Player").transform.position,false);
         if (owner.GetComponent<ShopScript>())
         {
             owner.GetComponent<ShopScript>().OnPurchase(owner.GetComponent<ShopScript>().ShopInventory[itemslot].itemId);

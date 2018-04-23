@@ -181,7 +181,7 @@ public class CharacterInventoryScript : MonoBehaviour
                 {
                     target.GetComponent<CharacterStatsScript>().currentMana += ItemManager.InventoryItemList[itemid].healRating;
                 }
-                FindObjectOfType<AudioPlayerScript>().PlayAudio("Drink", GameObject.Find("Player").transform.position);
+                FindObjectOfType<AudioPlayerScript>().PlayAudio("Drink", GameObject.Find("Player").transform.position, false);
                 break;
 
             case ItemManagerScript.InventoryItem.ItemType.weapon:              
@@ -244,7 +244,7 @@ public class CharacterInventoryScript : MonoBehaviour
                     g.GetComponent<SpellBase>().thisSpell = FindObjectOfType<SpellDatabase>().ItemToSpellConverter(i.ItemName, i.attributeBuff, i.duration, 4, 4);
                     g.GetComponent<SpellBase>().caster = GameObject.Find("Player");
                 }
-                FindObjectOfType<AudioPlayerScript>().PlayAudio("Drink", GameObject.Find("Player").transform.position);
+                FindObjectOfType<AudioPlayerScript>().PlayAudio("Drink", GameObject.Find("Player").transform.position, false);
                 break;
         }
     }

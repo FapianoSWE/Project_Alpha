@@ -34,7 +34,7 @@ public class QuestManagerScript : MonoBehaviour {
         public string goalDesc;
 
         //Kill quest
-        public Quest(int id,QuestType _questType,int amount, int enemyId,bool bossQuest)
+        public Quest(int id,QuestType _questType,int amount, int enemyId,bool bossQuest, int XpReward, int GoldReward)
         {
             
             questID = id;
@@ -43,11 +43,12 @@ public class QuestManagerScript : MonoBehaviour {
             isFinished = false;
             goalCompleted = false;
             enemy = enemyId;
-            
+            xpReward = XpReward;
+            goldReward = GoldReward;
         }
 
         //Fetch quest
-        public Quest(int id, QuestType _questType, int itemid,int amount)
+        public Quest(int id, QuestType _questType, int itemid,int amount, int XpReward, int GoldReward)
         {
             questID = id;
             questType = _questType;
@@ -55,10 +56,12 @@ public class QuestManagerScript : MonoBehaviour {
             itemID = itemid;
             isFinished = false;
             goalCompleted = false;
+            xpReward = XpReward;
+            goldReward = GoldReward;
         }
 
         //Talk quest
-        public Quest(int id, QuestType _questType, GameObject target, bool returnToGiver)
+        public Quest(int id, QuestType _questType, GameObject target, bool returnToGiver, int XpReward, int GoldReward)
         {
             questID = id;
             questType = _questType;
@@ -66,6 +69,8 @@ public class QuestManagerScript : MonoBehaviour {
             ReturnToGiver = returnToGiver;
             isFinished = false;
             goalCompleted = false;
+            xpReward = XpReward;
+            goldReward = GoldReward;
         }
     }
 	// Use this for initialization
@@ -73,12 +78,12 @@ public class QuestManagerScript : MonoBehaviour {
 	void Start () {
         DontDestroyOnLoad(gameObject);
         ItemManager = GameObject.Find("Item Manager");
-        QuestList.Add(new Quest(0,Quest.QuestType.kill,10, 0,false));
-        QuestList.Add(new Quest(1,Quest.QuestType.item, 0,5));
-        QuestList.Add(new Quest(2, Quest.QuestType.talk, null,false));
-        QuestList.Add(new Quest(3, Quest.QuestType.talk, null, true));
-        QuestList.Add(new Quest(4, Quest.QuestType.kill, 1, 2, true));
-        QuestList.Add(new Quest(5, Quest.QuestType.item, 14, 12));
+        QuestList.Add(new Quest(0,Quest.QuestType.kill,5, 0,false,200,50));
+        QuestList.Add(new Quest(1,Quest.QuestType.item, 0,5,100,100));
+        QuestList.Add(new Quest(2, Quest.QuestType.talk, null,false,100,50));
+        QuestList.Add(new Quest(3, Quest.QuestType.talk, null, true,100,50));
+        QuestList.Add(new Quest(4, Quest.QuestType.kill, 1, 2, true,500,250));
+        QuestList.Add(new Quest(5, Quest.QuestType.item, 14, 12,250,200));
     }
 	
 	// Update is called once per frame

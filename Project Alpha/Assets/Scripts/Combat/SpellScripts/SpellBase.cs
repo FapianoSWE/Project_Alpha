@@ -144,7 +144,7 @@ public class SpellBase : MonoBehaviour {
                 s.statBuffType = (SpellBuff.StatBuffType)thisSpell.effect - 1;
                 Destroy(gameObject);
             }
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Explosion", GameObject.Find("Player").transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Explosion", GameObject.Find("Player").transform.position, true);
 
         }
         /*if (c.gameObject.tag == "Enemy" && c.gameObject != gameObject && !enemyCaster)

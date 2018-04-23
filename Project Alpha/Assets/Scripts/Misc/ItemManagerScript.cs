@@ -66,6 +66,7 @@ public class ItemManagerScript : MonoBehaviour {
             itemId = itemid;
             itemType = itemtype;
             healRating = healrating;
+            healType = healtype;
             can_use = canUse;
             itemMaxAmount = maxamount;
             value = Value;

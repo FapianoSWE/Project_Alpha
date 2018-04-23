@@ -25,7 +25,7 @@ public class AudioPlayerScript : MonoBehaviour {
         }
 
         audioSource = GetComponent<AudioSource>();
-        audioSource.clip = tracks[0];
+        audioSource.clip = tracks[Random.Range(0,tracks.Count)];
         audioSource.Play();
 	}
 	
@@ -63,17 +63,19 @@ public class AudioPlayerScript : MonoBehaviour {
         isPaused = focus;
     }
 
-    public void PlayAudio(string SoundName,Vector3 position)
+    public void PlayAudio(string SoundName,Vector3 position,bool IsRanged)
     {
         GameObject g = Instantiate(audioPlayerPrefab, position, Quaternion.identity);
         Time.timeScale = 1;
         if(Resources.Load("Audio/Combat/" + SoundName) != null)
         {
+            g.GetComponent<AudioSource>().volume = SoundVolume;
             g.GetComponent<AudioSource>().PlayOneShot((AudioClip)Resources.Load("Audio/Combat/" + SoundName));
             Destroy(g, 120);
         }
         else if (Resources.Load("Audio/UI/" + SoundName) != null)
         {
+            g.GetComponent<AudioSource>().volume = SoundVolume;
             g.GetComponent<AudioSource>().clip = (AudioClip)Resources.Load("Audio/UI/" + SoundName);
            // g.GetComponent<AudioSource>().PlayOneShot((AudioClip)Resources.Load("Audio/UI/" + SoundName));
             g.GetComponent<AudioSource>().Play();
@@ -81,6 +83,7 @@ public class AudioPlayerScript : MonoBehaviour {
         }
         else if (Resources.Load("Audio/Misc/" + SoundName) != null)
         {
+            g.GetComponent<AudioSource>().volume = SoundVolume;
             g.GetComponent<AudioSource>().PlayOneShot((AudioClip)Resources.Load("Audio/Misc/" + SoundName));
             Destroy(g, 120);
         }
@@ -90,6 +93,11 @@ public class AudioPlayerScript : MonoBehaviour {
         }
         if (FindObjectOfType<MenuOpenScript>().MenuOpen)
             Time.timeScale = 0;
+
+        if(!IsRanged)
+        {
+            g.GetComponent<AudioSource>().spatialBlend = 0;
+        }
     }
 
     public void AdjustSoundVolume(Slider s)

@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be0535532f728145b2cceea4892cd23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  critPrefab: {fileID: 1273125902502414, guid: ff465dbfce9251b41b75a6b1e1321c13, type: 2}
+  textPrefab: {fileID: 0}
   baseCritChance: 10
   currentCritChance: 0
   statUI: {fileID: 0}
@@ -1134,6 +1134,8 @@ MonoBehaviour:
   baseHealth: 100
   healthRegen: 5
   baseHealthRegen: 5
+  speed: 100
+  regenEnabled: 1
 --- !u!114 &114408535508134852
 MonoBehaviour:
   m_ObjectHideFlags: 1

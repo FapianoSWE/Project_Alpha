@@ -23,7 +23,6 @@ public class QuestGiverScript : MonoBehaviour
    void Start () {
         QuestManager = GameObject.Find("Quest Manager");
         NPCQuest = QuestManager.GetComponent<QuestManagerScript>().QuestList[QuestId];
-        NPCQuest.xpReward = 500;
         NPCQuest.questGiver = gameObject;
 
         NPCQuest.Target = talkQuestTarget;

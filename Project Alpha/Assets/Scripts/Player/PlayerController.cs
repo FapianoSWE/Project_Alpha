@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     public CastStates castStates = new CastStates();
 
-    public bool debugMode = false;
+    public bool debugMovement = false;
     public float debugSpeed = 20f;
 
     public float castTimer = -1;
@@ -85,6 +85,8 @@ public class PlayerController : MonoBehaviour
 
     public BoxCollider bCollider;
 
+    public bool debugMode = false;
+    GameObject debugText;
     void Start ()
     {
         spellDatabase = GameObject.Find("SpellObjects").GetComponent<SpellDatabase>();
@@ -116,6 +118,8 @@ public class PlayerController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         currentScene = SceneManager.GetActiveScene().name;
         prevScene = SceneManager.GetActiveScene().name;
+        debugText = GameObject.Find("DebugMode");
+        debugText.SetActive(false);
     }
 
     
@@ -140,7 +144,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.Home))
+        {
+            debugMode = !debugMode;
+            debugText.SetActive(debugMode);
+        }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -186,7 +194,7 @@ public class PlayerController : MonoBehaviour
         }
         prevScene = SceneManager.GetActiveScene().name;
 
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y) && debugMode)
             DebugChest();
 
         if(GetComponent<CharacterStatsScript>().currentHealth<=0)
@@ -227,7 +235,7 @@ public class PlayerController : MonoBehaviour
             */
             //force controller down slope. Disable jumping
 
-        if(!debugMode)
+        if(!debugMovement)
         {
             Physics.IgnoreCollision(GetComponent<Collider>(), GameObject.FindGameObjectWithTag("Terrain").GetComponent<Collider>(), false);
             Physics.IgnoreCollision(bCollider, GameObject.FindGameObjectWithTag("Terrain").GetComponent<Collider>(), false);
@@ -300,7 +308,7 @@ public class PlayerController : MonoBehaviour
             grounded = (flags & CollisionFlags.Below) != 0;
 
         }
-        else if(debugMode)
+        else if(debugMovement)
         {
             moveDirection = new Vector3((Input.GetAxis("Horizontal")), 0, Input.GetAxis("Vertical"));
 
@@ -328,7 +336,7 @@ public class PlayerController : MonoBehaviour
             {
                 AttackZone.SetActive(true);
                 coolDown = attackCoolDown;
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("Swipe", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("Swipe", transform.position, true);
         }
 
 
@@ -344,14 +352,31 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.R) && canMove)
+           if(Input.GetKeyDown(KeyCode.Q))
+        {
+            foreach (ItemManagerScript.InventoryItem i in GetComponent<CharacterInventoryScript>().InventoryStorage)
             {
-                transform.rotation = originalRotation;
-                transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+                if(i.itemId == 0)
+                {
+                    GetComponent<CharacterInventoryScript>().OnUseItem(0);
+                    GetComponent<CharacterInventoryScript>().RemoveItem(0, 1);
+                }
             }
-            
+        }
 
-            for (int i = 0; i < hotBar.Length; i++)
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            foreach (ItemManagerScript.InventoryItem i in GetComponent<CharacterInventoryScript>().InventoryStorage)
+            {
+                if (i.itemId == 1)
+                {
+                    GetComponent<CharacterInventoryScript>().OnUseItem(1);
+                    GetComponent<CharacterInventoryScript>().RemoveItem(1, 1);
+                }
+            }
+        }
+
+        for (int i = 0; i < hotBar.Length; i++)
             {
             if (Input.GetKeyDown(hotBar[i]) && castStates != CastStates.casting)
                 {
@@ -367,14 +392,14 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.U))
+            if(Input.GetKeyDown(KeyCode.U) && debugMode)
         {
             Instantiate(Resources.Load("Enemies/MagicEnemyPrefab"), new Vector3(transform.position.x, transform.position.y, transform.position.z + 5), Quaternion.identity);
         }
 
-            if(Input.GetKeyDown(KeyCode.T))
+            if(Input.GetKeyDown(KeyCode.T) && debugMode)
             {
-                debugMode = !debugMode;
+                debugMovement = !debugMovement;
 
             }
         
@@ -394,7 +419,7 @@ public class PlayerController : MonoBehaviour
     {
         if(GetComponent<CharacterStatsScript>().currentMana >= findSpell(id).manacost)
         {
-            FindObjectOfType<AudioPlayerScript>().PlayAudio("SpellCast", transform.position);
+            FindObjectOfType<AudioPlayerScript>().PlayAudio("SpellCast", transform.position, true);
             castTimer = findSpell(id).castTime;
             currentSpellObject = Resources.Load("Spells/" + findSpell(id).objectName) as GameObject;
             duration = findSpell(id).duration;
